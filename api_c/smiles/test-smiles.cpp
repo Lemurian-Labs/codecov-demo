@@ -8,7 +8,7 @@ int main() {
     assert(s.smile() == ":)");
     
     // Optionally, you can test the frown function as well:
-    // assert(s.frown() == ":(");
+    assert(s.frown() == ":(");
 
     std::cout << "All tests passed!" << std::endl;
     return 0;
