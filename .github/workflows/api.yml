@@ -46,8 +46,8 @@ jobs:
         run: |
           cd api_c/build
           # Adjust these executables to whatever your build creates
-          ./test-calculator
-          ./test-smiles
+          ./calculator/test-calculator
+          ./smiles/test-smiles
 
       # 8. Generate C++ coverage report with lcov
       - name: Generate C++ coverage
