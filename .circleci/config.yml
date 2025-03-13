@@ -10,15 +10,46 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install requirements
+          name: Install Python requirements
           command: pip install -r api/requirements.txt
       - run:
-          name: Run tests and collect coverage
-          command: pytest --cov api.calculator
-      - codecov/upload
+          name: Run Python tests and collect coverage
+          command: pytest --cov api/calculator --cov-report=xml
+      - codecov/upload:
+          flags: python
+
+  test-c:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install C++ dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y build-essential cmake lcov
+      - run:
+          name: Build and run C++ tests
+          command: |
+            cd api_c
+            mkdir -p build
+            cd build
+            cmake -DCMAKE_BUILD_TYPE=Debug ..
+            make
+            ./calculator/test-calculator
+            ./smiles/test-smiles
+      - run:
+          name: Generate C++ coverage
+          command: |
+            cd api_c/build
+            lcov --capture --directory . --output-file coverage.info
+            lcov --remove coverage.info '/usr/*' --output-file coverage.info
+      - codecov/upload:
+          flags: "c++"
 
 workflows:
   version: 2.1
   build-test:
     jobs:
       - test-api
+      - test-c
