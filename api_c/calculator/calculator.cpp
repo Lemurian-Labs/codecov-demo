@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "calculator.hpp"
 
 double Calculator::add(double x, double y) {
     return x + y;

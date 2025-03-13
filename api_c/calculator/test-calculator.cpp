@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "calculator.hpp"
 #include <cassert>
 #include <iostream>
 #include <variant>

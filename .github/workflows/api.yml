@@ -5,17 +5,69 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test python API
+    name: Test Python and C++ code
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-    - name: Install requirements
-      run: pip install -r api/requirements.txt
-    - name: Run tests and collect coverage
-      run: pytest --cov
-    - name: Upload coverage reports to Codecov with GitHub Action
-      uses: codecov/codecov-action@v5
-      env:
+      # 1. Check out your repository
+      - uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      # 3. Install Python dependencies
+      - name: Install Python requirements
+        run: pip install -r api/requirements.txt
+
+      # 4. Run Python tests with coverage
+      - name: Run Python tests and collect coverage
+        run: |
+          pytest --cov --cov-report=xml --cov-report=term
+          # Produces coverage.xml by default
+
+      # 5. Install dependencies for C++ coverage
+      - name: Install C++ dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake lcov
+
+      # 6. Build C++ tests (calculator, smiles) with coverage flags
+      - name: Build C++ tests
+        run: |
+          cd api_c
+          mkdir build
+          cd build
+          # Use CMake to enable coverage; for example, pass coverage flags or set up in CMakeLists
+          cmake -DCMAKE_BUILD_TYPE=Debug ..
+          make
+
+      # 7. Run C++ tests
+      - name: Run C++ tests
+        run: |
+          cd api_c/build
+          # Adjust these executables to whatever your build creates
+          ./test-calculator
+          ./test-smiles
+
+      # 8. Generate C++ coverage report with lcov
+      - name: Generate C++ coverage
+        run: |
+          cd api_c/build
+          # Capture coverage data
+          lcov --capture --directory . --output-file coverage.info
+          # Exclude system files
+          lcov --remove coverage.info '/usr/*' --output-file coverage.info
+          # Optional: display a summary
+          lcov --list coverage.info
+
+      # 9. Upload coverage reports to Codecov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          # Upload both Python (coverage.xml) and C++ (coverage.info) coverage
+          files: |
+            coverage.xml
+            api_c/build/coverage.info
+          fail_ci_if_error: true

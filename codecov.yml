@@ -9,11 +9,21 @@ comment:
   
 component_management:
   individual_components:
+    # Python components
     - component_id: api-calculator  # this is an identifier that should not be changed
       name: calculator  # this is a display name, and can be changed freely
       paths:
         - api/calculator/
-    - component_id: api-smiles  # this is an identifier that should not be changed
-      name: smiles  # this is a display name, and can be changed freely
+    - component_id: api-smiles 
+      name: smiles 
       paths:
-        - api/smiles/        
+        - api/smiles/   
+    # C++ components    
+    - component_id: api_c-calculator
+      name: calculator-c 
+      paths:
+        - api_c/calculator/
+    - component_id: api_c-smiles
+      name: smiles-c 
+      paths:
+        - api_c/smiles/            
