@@ -6,6 +6,11 @@
 #         target: 100%
 #         threshold: 1%
 
+coverage:
+  status:
+    project: off
+    patch: off
+
 comment:
   layout: "condensed_header, diff, flags, components"
 
