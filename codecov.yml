@@ -1,11 +1,14 @@
+# For this to work and be used to fail the build, wee need pro account.
 coverage:
   status:
     project:
       default:
         target: 100%
         threshold: 1%
-comment:
-  layout: "condensed_header, diff, flags, components"
+
+
+#comment:
+ # layout: "condensed_header, diff, flags, components"
   
 component_management:
   individual_components:
