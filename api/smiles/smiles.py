@@ -4,3 +4,6 @@ class Smiles:
 
     def frown(self):
         return ":("
+    
+    def wink(self):
+        return ":P"
