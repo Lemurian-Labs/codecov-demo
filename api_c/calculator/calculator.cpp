@@ -14,7 +14,7 @@ double Calculator::multiply(double x, double y) {
 
 std::variant<double, std::string> Calculator::divide(double x, double y) {
     if (y == 0) {
-        return std::string("Cannot divide by 0");
+        return std::string("Cannot divide by zero");
     }
     return x / y;
 }
